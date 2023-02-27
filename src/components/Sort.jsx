@@ -1,19 +1,43 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setSort } from "../redux/slices/filterSlice";
+
+export const list = [
+  { name: "popularity ⬇️", sortProperty: "rating" },
+  { name: "popularity ⬆️", sortProperty: "-rating" },
+  { name: "price ⬇️", sortProperty: "price" },
+  { name: "price ⬆️", sortProperty: "-price" },
+  { name: "name A-Z", sortProperty: "-title" },
+  { name: "name Z-A", sortProperty: "title" },
+];
 
 const Sort = () => {
+  const dispatch = useDispatch();
+  const sort = useSelector((state) => state.filter.sort);
+  const sortRef = useRef();
+
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState(0);
 
-  const list = ["popularity", "price", "name"];
-  const sortName = list[selected];
-
-  const onClickListItem = (index) => {
-    setSelected(index)
-    setOpen(false)
+  const onClickListItem = (obj) => {
+    dispatch(setSort(obj));
+    setOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.path.includes(sortRef.current)) {
+        setOpen(false);
+      }
+    };
+    document.body.addEventListener("click", handleClickOutside);
+    return () => {
+      document.body.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
@@ -28,7 +52,7 @@ const Sort = () => {
           />
         </svg>
         <b>Sort by:</b>
-        <span onClick={() => setOpen(!open)}>{sortName}</span>
+        <span onClick={() => setOpen(!open)}>{sort.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
@@ -37,10 +61,12 @@ const Sort = () => {
               return (
                 <li
                   key={index}
-                  onClick={() => onClickListItem(index)}
-                  className={selected === index ? "active" : ""}
+                  onClick={() => onClickListItem(criteria)}
+                  className={
+                    sort.sortProperty === criteria.sortProperty ? "active" : ""
+                  }
                 >
-                  {criteria}
+                  {criteria.name}
                 </li>
               );
             })}
