@@ -1,8 +1,10 @@
 // REACT
 import React, { useState, useEffect, useRef } from "react";
+
 // LIBRARIES
 import axios from "axios";
 import qs from "qs";
+
 // REDUX
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -10,8 +12,10 @@ import {
   setCurrentPage,
   setFilters,
 } from "../redux/slices/filterSlice";
+
 // REACT ROUTE
 import { useNavigate } from "react-router-dom";
+
 // COMPONENTS
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
