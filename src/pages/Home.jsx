@@ -14,7 +14,7 @@ import {
 } from "../redux/slices/filterSlice";
 
 // REACT ROUTE
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 // COMPONENTS
 import Categories from "../components/Categories";
@@ -105,7 +105,11 @@ const Home = () => {
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
 
-  const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+  const pizzas = items.map((obj) => (
+    <Link to={`/pizza/${obj.id}`} key={obj.id}>
+      <PizzaBlock {...obj} />
+    </Link>
+  ));
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ));
