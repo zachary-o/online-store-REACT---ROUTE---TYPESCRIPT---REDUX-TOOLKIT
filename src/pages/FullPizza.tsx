@@ -31,7 +31,7 @@ const FullPizza: React.FC = () => {
   }, []);
 
   if (!pizza) {
-    return <>"Loading..."</>;
+    return "Loading...";
   }
 
   return (
