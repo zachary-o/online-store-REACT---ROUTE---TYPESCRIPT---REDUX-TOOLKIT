@@ -5,22 +5,25 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearItems } from "../redux/slices/cartSlice";
 
-import CartItem from "../components/CartItem";
-import CartEmpty from "../components/CartEmpty";
+import CartItem from "../components/CartItem/CartItem";
+import CartEmpty from "../components/CartEmpty/CartEmpty";
 
 const Cart: React.FC = () => {
   const dispatch = useDispatch();
   const { totalPrice, items } = useSelector((state) => state.cart);
 
-  const totalCount = items.reduce((sum: number, item: any) => sum + item.count, 0);
+  const totalCount = items.reduce(
+    (sum: number, item: any) => sum + item.count,
+    0
+  );
 
   const onClickClearAll = () => {
     dispatch(clearItems());
   };
 
-if(!totalPrice) {
-  return <CartEmpty />
-}
+  if (!totalPrice) {
+    return <CartEmpty />;
+  }
 
   return (
     <div className="container container--cart">
@@ -112,10 +115,7 @@ if(!totalPrice) {
             </span>
             <span>
               {" "}
-              Total amount:{" "}
-              <b>
-                {totalPrice < 0 ? 0 : totalPrice} $
-              </b>{" "}
+              Total amount: <b>{totalPrice < 0 ? 0 : totalPrice} $</b>{" "}
             </span>
           </div>
           <div className="cart__bottom-buttons">

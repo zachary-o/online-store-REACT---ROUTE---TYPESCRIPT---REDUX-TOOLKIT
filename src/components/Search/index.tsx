@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useContext } from "react";
 import debounce from "lodash.debounce";
 
 import { SearchContext } from "../../App";
@@ -7,7 +7,7 @@ import styles from "./Search.module.scss";
 
 const Search: React.FC = () => {
   const [value, setValue] = useState("");
-  const { setSearchValue } = React.useContext(SearchContext);
+  const { setSearchValue } = useContext(SearchContext);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onClickClear = () => {

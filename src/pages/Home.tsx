@@ -17,13 +17,13 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 
 // COMPONENTS
-import Categories from "../components/Categories";
-import Sort from "../components/Sort";
+import Categories from "../components/Categories/Categories";
+import Sort from "../components/Sort/Sort";
 import PizzaBlock from "../components/PizzaBlock/index";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination";
 import { SearchContext } from "../App";
-import { list } from "../components/Sort";
+import { list } from "../components/Sort/Sort";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -103,7 +103,6 @@ const Home: React.FC = () => {
 
     isSearch.current = false;
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
-
 
   const pizzas = items.map((obj) => (
     <Link to={`/pizza/${obj.id}`} key={obj.id}>
