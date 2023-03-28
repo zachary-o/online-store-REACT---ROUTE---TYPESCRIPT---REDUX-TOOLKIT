@@ -1,19 +1,21 @@
 import React, { useRef, useState, useCallback } from "react";
 import debounce from "lodash.debounce";
 
-import { SearchContext } from "../../App.tsx";
+import { SearchContext } from "../../App";
 
 import styles from "./Search.module.scss";
 
-const Search = () => {
+const Search: React.FC = () => {
   const [value, setValue] = useState("");
   const { setSearchValue } = React.useContext(SearchContext);
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const onClickClear = () => {
     setSearchValue("");
     setValue("");
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current?.focus();
+    }
   };
 
   const updateSearchValue = useCallback(
