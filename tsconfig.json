@@ -38,7 +38,7 @@
     "target": "es3",
     "watch": true,
 
-    "allowSyntheticDefaultImports": false,
+    "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "allowUmdGlobalAccess": false,
@@ -63,7 +63,7 @@
     "listEmittedFiles": false,
     "mapRoot": ".",
     "maxNodeModuleJsDepth": 0,
-    "moduleResolution": "classic",
+    "moduleResolution": "node",
     "newLine": "CRLF",
     "noEmit": false,
     "noFallthroughCasesInSwitch": false,
@@ -88,6 +88,6 @@
   },
   "files": ["core.ts", "app.ts"],
 
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/@types"],
   "exclude": ["src/**/*.spec.ts", "node_modules"]
 }
