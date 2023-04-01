@@ -1,18 +1,29 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 
-import Search from "../Search";
+import Search from "../Search/index";
 import logo from "../../assets/img/pizza-logo.svg";
 
 const Header = () => {
   const { items, totalPrice } = useSelector((state) => state.cart);
+  const location = useLocation();
+  const isMounted = useRef(false);
 
   const totalCount = items.reduce(
     (sum: number, item: any) => sum + item.count,
     0
   );
+
+  useEffect(() => {
+    if (isMounted.current) {
+      const json = JSON.stringify(items);
+      localStorage.setItem("cart", json);
+    }
+
+    isMounted.current = true;
+  }, [items]);
 
   return (
     <div className="header">
@@ -26,10 +37,11 @@ const Header = () => {
             </div>
           </div>
         </Link>
-        <Search />
+
+        {location.pathname !== "/cart" && <Search />}
         <div className="header__cart">
           <Link to="/cart" className="button button--cart">
-            <span>{totalPrice < 0 ? 0 : totalPrice} $</span>
+            <span>{totalPrice} $</span>
             <div className="button__delimiter"></div>
             <svg
               width="18"
@@ -60,7 +72,7 @@ const Header = () => {
                 strokeLinejoin="round"
               />
             </svg>
-            <span>{totalCount < 0 ? 0 : totalCount}</span>
+            <span>{totalCount}</span>
           </Link>
         </div>
       </div>

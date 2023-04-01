@@ -17,7 +17,7 @@
     "paths": {
       "jquery": ["node_modules/jquery/dist/jquery"]
     },
-    "lib": ["es5", "es6", "es2015.promise", "es2016.array.include"],
+    "lib": ["es5", "es6", "es2015.promise", "es2016.array.include", "DOM"],
     "jsx": "react",
     "jsxFactory": "React.createElement",
     "allowJs": false,

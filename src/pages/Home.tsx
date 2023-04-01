@@ -1,20 +1,22 @@
 // REACT
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 // LIBRARIES
 import axios from "axios";
 import qs from "qs";
 
 // REDUX
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   setCategoryId,
   setCurrentPage,
   setFilters,
 } from "../redux/slices/filterSlice";
+import { RootState, useAppDispatch } from "src/redux/store";
+import { SearchPizzaParams } from "src/redux/slices/pizzaSlice";
 
 // REACT ROUTE
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // COMPONENTS
 import Categories from "../components/Categories/Categories";
@@ -27,21 +29,21 @@ import { list } from "../components/Sort/Sort";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
   const { categoryId, sort, currentPage } = useSelector(
-    (state) => state.filter
+    (state: RootState) => state.filter
   );
 
   const { searchValue } = React.useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const onChangeCategory = (index: number) => {
+  const onChangeCategory = useCallback((index: number) => {
     dispatch(setCategoryId(index));
-  };
+  }, []);
 
   const onChangePage = (page: number) => {
     dispatch(setCurrentPage(page));
@@ -76,11 +78,13 @@ const Home: React.FC = () => {
       navigate(`?${queryString}`);
     }
     isMounted.current = true;
-  }, [categoryId, sort.sortProperty, currentPage]);
+  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   useEffect(() => {
     if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
+      const params = qs.parse(
+        window.location.search.substring(1)
+      ) as SearchPizzaParams;
 
       const sort = list.find((obj) => obj.sortProperty === params.sortProperty);
 
@@ -104,11 +108,7 @@ const Home: React.FC = () => {
     isSearch.current = false;
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
-  const pizzas = items.map((obj) => (
-    <Link to={`/pizza/${obj.id}`} key={obj.id}>
-      <PizzaBlock {...obj} />
-    </Link>
-  ));
+  const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
   ));
@@ -117,7 +117,7 @@ const Home: React.FC = () => {
     <div className="container">
       <div className="content__top">
         <Categories value={categoryId} onChangeCategory={onChangeCategory} />
-        <Sort />
+        <Sort value={sort} />
       </div>
       <h2 className="content__title">All pizzas</h2>
       <div className="content__items">{isLoading ? skeletons : pizzas}</div>
